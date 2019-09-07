@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Subscription;
 use App\Entity\User;
 use App\Repository\CardRepository;
+use App\Repository\SubscriptionRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -19,11 +21,13 @@ class AdminController extends FOSRestController
 {
     private $userRepository;
     private $em;
+    private $subscriptionRepository;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, SubscriptionRepository $subscriptionRepository)
     {
         $this->userRepository = $userRepository;
         $this->em = $entityManager;
+        $this->subscriptionRepository = $subscriptionRepository;
     }
 
     /**
@@ -40,17 +44,6 @@ class AdminController extends FOSRestController
      */
     public function getApiUser(User $user)
     {
-        return $this->view($user);
-    }
-
-    /**
-     * @Rest\Post("/api/admin/user")
-     * @ParamConverter ("user", converter="fos_rest.request_body")
-     */
-    public function postApiUser(User $user)
-    {
-        $this->em->persist($user);
-        $this->em->flush();
         return $this->view($user);
     }
 
@@ -106,5 +99,41 @@ class AdminController extends FOSRestController
         return new Response(null, 204);
     }
 
+    /**
+     * @Rest\Get("/api/admin/subscriptions")
+     */
+    public function getApiSubscriptions()
+    {
+        $subscriptions = $this->subscriptionRepository->findAll();
+        return $this->view($subscriptions);
+    }
 
+    /**
+     * @Rest\Get("/api/admin/subscription/{id}")
+     */
+    public function getApiSubscription(Subscription $subscription)
+    {
+        return $this->view($subscription);
+    }
+
+    /**
+     * @Rest\Post("/api/admin/subscription")
+     * @ParamConverter ("subscription", converter="fos_rest.request_body")
+     */
+    public function postApiSubscription(Subscription $subscription)
+    {
+        $this->em->persist($subscription);
+        $this->em->flush();
+        return $this->view($subscription);
+    }
+
+    /**
+     * @Rest\Delete("/api/admin/subscription/{id}")
+     */
+    public function deleteApiSubscription(Subscription $subscription)
+    {
+        $this->em->remove($subscription);
+        $this->em->flush();
+        return new Response(null, 204);
+    }
 }
