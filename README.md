@@ -23,5 +23,7 @@ cp docker-compose.override.yml.dist docker-compose.override.yml
 ```bash
 cp .env.dist .env
 docker-compose up -d
-docker-compose exec --user=application web bash
+docker-compose exec web bash
+composer install
+composer req orm security monolog translator serializer validator friendsofsymfony/rest-bundle sensio/framework-extra-bundle
 ```
