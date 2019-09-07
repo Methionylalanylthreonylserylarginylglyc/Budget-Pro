@@ -2,18 +2,17 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\UserRepository;
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
-class UserController extends AbstractController
+class UserController extends FOSRestController
 {
-    /**
-     * @Route("/user", name="user")
-     */
-    public function index()
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository)
     {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
+        $this->userRepository = $userRepository;
     }
+
 }
