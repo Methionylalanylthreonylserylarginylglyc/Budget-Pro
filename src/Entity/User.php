@@ -62,7 +62,11 @@ class User
     private $subscription;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Card", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Card")
+     * @ORM\JoinTable(name="user_cards",
+     *     joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="card_id", referencedColumnName="id", unique=true)}
+     *     )
      */
     private $cards;
 
