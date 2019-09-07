@@ -26,4 +26,5 @@ docker-compose up -d
 docker-compose exec web bash
 composer install
 composer req orm security monolog translator serializer validator friendsofsymfony/rest-bundle sensio/framework-extra-bundle
+composer --dev req profiler maker
 ```
